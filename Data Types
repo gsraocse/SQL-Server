@@ -1,0 +1,20 @@
+
+
+char(size)  / varchar(size) - 1 -8000
+nchar(size) - 1 -4000
+bit
+TINYINT 1 
+smallint 2
+INT 4
+BIGINT  8
+DECIMAL(m,d) 18
+NUMERIC(m,d) 18
+FLOAT(n)
+
+DATE -> 0001-01-01' to '9999-12-31'.
+DATETIME -> 1753-01-01 00:00:00' to '9999-12-31 23:59:59' Time: '00:00:00' to '23:59:59:997'
+DATETIME2 -> '0001-01-01' to '9999-12-31' time:  '00:00:00' to '23:59:59:9999999'
+SMALLDATETIME -> Date:'1900-01-01' to '2079-06-06' Time:'00:00:00' to '23:59:59'
+TIME
+Varbinary / XML
+BLOB
