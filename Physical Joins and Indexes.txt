@@ -1,0 +1,105 @@
+---Hash Match - will be happend when we join small table vs big table
+
+Product - Clustered index on ProductID
+ProductCategory - Clustered index on ProductCategoryld 
+SELECT p.*
+FROM Production.Product p
+JOIN Production.ProductCategory pc
+ ON p.ProductSubcategoryID = pc.ProductCategoryID;
+
+ ---Merge Join -if both tables are having indexes and if we use those keys then it uses merge join
+ SELECT pm.*
+FROM Production.ProductModel pm
+JOIN Production.ProductModelProductDescriptionCulture pmpd
+ON pm.ProductModelID = pmpd.ProductModelID ;
+
+
+---Nested join: 
+SELECT soh.*
+FROM Sales.SalesOrderHeader soh
+JOIN Sales.SalesOrderDetail sod
+ON soh.SalesOrderID = sod.SalesOrderID
+ WHERE soh.SalesOrderID = 71832 ;
+
+---To check the Cashed plans use below query:
+SELECT p.query_plan,
+t.text
+FROM sys.dm_exec_cached_plans r
+CROSS APPLY sys.dm_exec_query_plan(r.plan_handle) p
+CROSS APPLY sys.dm_exec_sql_text(r.plan_handle) t ;
+
+
+---Index examples:
+--drop table dbo.test1
+CREATE TABLE dbo.Test1 (C1 INT,C2 INT,C3 VARCHAR(50)
+)
+;WITH Nums
+AS (SELECT TOP (10000) ROW_NUMBER() OVER (ORDER BY (SELECT 1 )) AS n
+FROM Master.sys.All_Columns ac1
+CROSS JOIN Master.sys.ALL_Columns ac2
+)
+--select * from Nums
+INSERT INTO dbo.Test1(C1, C2, C3)
+SELECT n,n,'C3' from Nums
+
+SET STATISTICS IO ON
+UPDATE dbo.Test1
+SET C1 = 1,
+C2 = 1
+WHERE C2 = 1 ;
+
+
+CREATE CLUSTERED INDEX iTest
+ON dbo.Test1(C1) ;
+
+CREATE INDEX iTest2
+ON dbo.Test1(C2) ;
+
+
+/*A worktable is a temporary table used internally by SQL Server to process the intermediate results of a
+query. Worktables are created in the tempdb database and are dropped automatically after query execution.*/
+--Non clustered index
+SELECT t.C1,
+t. C2
+FROM dbo.Test1 AS t
+WHERE C1 = 1000 ;
+
+CREATE NONCLUSTERED INDEX incl ON dbo.Test1(C1) ;
+
+CREATE CLUSTERED INDEX icl ON dbo.Test1(C1) ;
+
+
+
+Covering Index:
+SELECT a.PostalCode
+FROM Person.Address AS a
+WHERE a.StateProvinceID = 42 ;
+
+--drop  INDEX [IX_Address_StateProvinceID] on  [Person].[Address]
+CREATE NONCLUSTERED INDEX [IX_Address_StateProvinceID]
+ON [Person].[Address] ([StateProvinceID] ASC)
+INCLUDE (PostalCode)
+ 
+
+
+ ----Filtered Indexes
+ A filtered index is a nonclustered index that uses a filter, basically a WHERE clause
+
+SELECT soh.PurchaseOrderNumber,
+soh.OrderDate,
+soh.ShipDate, 
+soh.SalesPersonID
+FROM Sales.SalesOrderHeader AS soh
+WHERE PurchaseOrderNumber LIKE 'PO5%'
+AND soh.SalesPersonID IS NOT NULL ;;
+
+--drop index IX_Test on   Sales.SalesOrderHeader
+
+CREATE NONCLUSTERED INDEX IX_Test
+ON Sales.SalesOrderHeader(PurchaseOrderNumber ,SalesPersonID)
+INCLUDE (OrderDate,ShipDate);
+
+CREATE NONCLUSTERED INDEX IX_Test
+ON Sales.SalesOrderHeader(PurchaseOrderNumber,SalesPersonID)
+INCLUDE (OrderDate,ShipDate)
+WHERE PurchaseOrderNumber IS NOT NULL AND SalesPersonID IS NOT NULL
