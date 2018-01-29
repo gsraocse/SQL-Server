@@ -1,0 +1,95 @@
+
+/** Raise Error**/
+BEGIN TRY
+DECLARE @result INT
+SET @result = 1/0
+END TRY
+BEGIN CATCH
+DECLARE
+@ErMessage NVARCHAR(2048),
+@ErSeverity INT,
+@ErState INT
+SELECT
+@ErMessage = ERROR_MESSAGE(),
+@ErSeverity = ERROR_SEVERITY(),
+@ErState = ERROR_STATE()
+RAISERROR ('error in number division',16,1);
+RAISERROR (@ErMessage, @ErSeverity,@ErState);
+RAISERROR (49903, 16, 1);  -- System related messages 
+RAISERROR (51000, 16, 1); -- Not defined in system messages.
+RAISERROR (51000, 25, 1) WITH LOG;; -- Change the @ErSeverity level from 16 to 25
+PRINT 'End of error handling';
+END CATCH
+
+ SELECT * FROM sys.messages
+ WHERe message_id=51000 
+ --and severity=16
+ SELECT * FROM  sys.syslanguages
+ where lcid=1033
+
+
+ --select min(message_id), max(message_id) from sys.messages
+--HOW to Add custom error messages to sys.messages
+EXEC sys.sp_addmessage @msgnum = 51000, @severity = 16, @msgtext  = N'This is a custom error';
+
+
+BEGIN  TRY
+ DECLARE @result INT
+ SET @result = 1/0;
+END TRY
+BEGIN CATCH
+DECLARE
+@ErMessage NVARCHAR(2048),
+@ErSeverity INT,
+@ErState INT,
+@Ernumber INT 
+SELECT 
+   @ErMessage = ERROR_MESSAGE(),
+   @ErSeverity = ERROR_SEVERITY(),
+   @ErState = ERROR_STATE(),
+   @Ernumber=ERROR_Number();
+--THROW; 
+--THROW 50001,@ErMessage,1  - Here it will print the line 
+--THROW @Ernumber,@ErMessage,@ErState -- Here you will get error,
+--THROW 49903, 'RAM related message.', 1 -- System related error messages
+THROW 51000, 'This is a custom error!', 1  -- Not defined in system messages
+END CATCH
+ 
+
+
+--NESTED throw statment
+ 
+ BEGIN  TRY
+ DECLARE @result INT
+ SET @result = 1/0;
+ END TRY
+ BEGIN CATCH
+ BEGIN TRY
+ SELECT PARSE('2013JUNE32' AS DATETIME)
+ END TRY
+ BEGIN CATCH
+ THROW;
+ END CATCH;
+  THROW;
+ END CATCH 
+
+ /*nested Raise statement*/
+
+  BEGIN  TRY
+ DECLARE @result INT
+ SET @result = 1/0;
+ END TRY
+ BEGIN CATCH
+ BEGIN TRY
+ SELECT PARSE('2013JUNE32' AS DATETIME)
+ END TRY
+ BEGIN CATCH
+RAISERROR ('format error', 16, 1);
+ END CATCH 
+RAISERROR ('divideby zero erro', 16, 1);
+ END CATCH 
+
+
+
+
+ 
