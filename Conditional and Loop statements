@@ -1,0 +1,249 @@
+Conditional Statements:
+-> IF -else
+-> Case-when
+
+Loop statememnts:
+ WHILE--
+ WAITFOR
+
+  Others:
+   RETURN    
+   GOTO
+   BREAK
+   CONTINUE
+   lable
+
+  Case 1: 
+  DECLARE @a int=10;
+  IF @a<10
+  PRINT 'lessthan'
+  else
+  print 'greater than'
+
+ CASE 2: 
+  IF  EXISTS(SELECT 1 FROM emp)
+  BEGIN
+  DROP table a
+  END
+
+  IF NOT EXISTS(SELECT 1 FROM emp)
+   BEGIN
+   CREATE table
+   END
+
+
+case 3 :
+
+   IF (SELECT count(*) from emp)>2
+   print 'row exist'
+   print 'rows'
+   ELSE
+   print 'not exist'
+   END
+
+IN body if you want to write more than 1 statement, we have to keep that code insdie the BEGIN and END
+   IF (SELECT count(*) from emp)>100
+   BEGIN
+   print 'row exist'
+   print 'rows'
+   END
+   ELSE
+   BEGIN
+   print 'not exist'
+   print 'not exist'
+   END
+
+--IF ELSE IF
+--To check Heirarchical conditions use IF ELSE IF
+ DECLARE @a int=10;
+ DECLARE @b int=5;
+  IF @a<10
+  PRINT 'lessthan'
+  else if @b<10
+  print 'greater than'
+    else if @b<10
+  print 'greater than'
+    else if @b<10
+  print 'greater than'
+   else if @b<10
+  print 'greater than' 
+  else
+  print 'nothing'
+
+
+  Other:
+
+  IF OBJECT_ID('dbo.emp') IS NOT NULL
+  print 'table exists'
+
+ If EXISTS ()
+ or
+ IF NOT EXISTS ()
+
+  --CASE WHEN 
+  Simple CASE expression : where we compare an expression to static values.
+Searched CASE expression: where we compare an expression to one or more logical conditions.       
+
+Syntax for Simple Case expression:
+SELECT CASE ("column_name")
+  WHEN "value1" THEN "result1"
+  WHEN "value2" THEN "result2"
+  ...
+  [ELSE "resultN"]
+  END
+FROM "table_name";  
+
+Searched case:
+SELECT CASE
+  WHEN "condition1" THEN "result1"
+  WHEN "condition2" THEN "result2"
+  ...
+  [ELSE "resultN"]
+  END
+FROM "table_name";
+
+Simple:
+SELECT *,CASE job
+WHEN 'CLERK' THEN 'CLE' 
+WHEN 'SALESMAN' then 'SAL'
+WHEN 'ANALYST' then 'ANA'
+ELSE NULL
+END
+FROM emp;
+
+
+Searched Case:
+SELECT *,
+CASE 
+WHEN JOB='CLERK' THEN 'CLE'
+WHEN JOB='SALESMAN' THEN 'SAL'
+WHEN JOB='SALESMAN' THEN 'SAL'
+WHEN JOB='SALESMAN' THEN 'SAL'
+ELSE NULL
+END
+FROM emp;
+
+
+
+Looping Statements:
+WHILE 
+WAITFORtime
+waitfordelay
+
+
+IF condition will evaluate only once where as WHILE loop keep on execute until that condition fail
+Always be careffull when you use while. some time it will go to infinite loop
+
+DECLARe @a int=1;
+WHILE (@a<=10)
+BEGIN
+PRINT @a
+SET @a=@a+1
+END
+
+DECLARe @a int=1
+if (@a<=10)
+BEGIN
+PRINT @a
+SET @a=@a+1
+END
+
+
+WHILE - IF 
+
+DECLARE @a int=1;
+WHILE (@a<=10)
+BEGIN
+IF @a%2=0
+PRINT 'EVEN'
+ELSE
+print 'odd'
+SET @a=@a+1
+END
+
+
+Operators:
+SELECT sum()
+FROM 
+(SELECT col1unioncol2 cino 30)
+OR 
+SELECT 10+20+30
+
++ -
+% - Modular
+/- Division
+* -  Multiplication
+
+DECLARE @a varchar(10)='102'
+SELECT CASt (@a as float)
+
+
+DECLARE @a varchar(10)='102'
+SELECT CASE WHEN ISNUMERIC(@a)=1 THEN CASt (@a as float) 
+ END as col
+
+
+ --BREAK -Continue:
+DECLARe @a int=1;
+WHILE (1=1)
+BEGIN
+If @a>5
+BREAK
+PRINT @a
+SET @a=@a+1
+END
+
+
+Continue:
+DECLARE @LoopCounter INT = 0
+    WHILE ( @LoopCounter <= 3)
+    BEGIN
+        SET @LoopCounter  = @LoopCounter  + 1  
+        IF(@LoopCounter = 2)
+          CONTINUE  
+        PRINT @LoopCounter
+    END
+    PRINT 'Statement after while loop'
+
+ Print only add numbers
+ DECLARe @a int=0;
+ WHILE (1=1)
+ BEGIN
+  SET @a=@a+1
+ If @a%2=1
+ CONTINUE
+ If (@a=10)
+ --BREAK OR RETURN -- Both for terminating the loop
+ PRINT @a
+ END
+
+ Advantages:
+ Whenever you want to use record by record then we can use While loop
+
+ Waitfor time-- It will wait till that time
+ waitfor delay -- It will wait for mentioned hours/mins/secondstime'
+
+ DECLARE @a int=10;
+ WAITFOR DELAY '00:00:01' (HH:MM:SS)
+ print @a
+
+  
+ DECLARE @a int=10;
+ WAITFOR TIME '07:17:31'-- (HH:MM:SS)
+ print @a
+
+
+ 
+ Lables:
+DECLARE @a int=10;
+If @a %2=0
+GOTO EVEN;
+ELSe
+GOTO ODD
+
+EVEN:
+PRINT @a
+
+ODD:
+PRINT @a
+ 
