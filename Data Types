@@ -1,5 +1,4 @@
 
-
 char(size)  / varchar(size) - 1 -8000
 nchar(size) - 1 -4000
 bit
@@ -18,3 +17,37 @@ SMALLDATETIME -> Date:'1900-01-01' to '2079-06-06' Time:'00:00:00' to '23:59:59'
 TIME
 Varbinary / XML
 BLOB
+
+*********************************************** Data type Precedence******************************************
+
+SQL Server uses the following precedence order for data types:
+user-defined data types (highest) 
+TYPE
+xml
+datetimeoffset
+datetime2
+datetime
+smalldatetime
+date
+time
+float
+real
+decimal
+money
+smallmoney
+bigint
+int
+smallint
+tinyint
+bit
+ntext
+text
+image
+timestamp
+uniqueidentifier
+nvarchar (including nvarchar(max) )
+nchar
+varchar (including varchar(max) )
+char
+varbinary (including varbinary(max) )
+binary (lowest)
