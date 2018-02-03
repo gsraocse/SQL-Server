@@ -2,13 +2,32 @@
 char(size)  / varchar(size) - 1 -8000
 nchar(size) - 1 -4000
 bit
-TINYINT 1 
-smallint 2
-INT 4
-BIGINT  8
-DECIMAL(m,d) 18
+TINYINT 1 Byte -> 0 to 255
+smallint 2 Byte -> -2^15 (-32,768) to 2^15-1 (32,767)
+INT 4 Byte -> -2^31 (-2,147,483,648) to 2^31-1 (2,147,483,647)
+BIGINT  8 Byte -> -2^63 (-9,223,372,036,854,775,808) to 2^63-1 (9,223,372,036,854,775,807)
+
+DECIMAL(m,d) 18 - ISo format
 NUMERIC(m,d) 18
+Precision	      Storage bytes
+1 - 9	           5
+10-19	         9
+20-28	         13
+29-38	         17
+
+
 FLOAT(n)
+
+
+
+int	-2,147,483,648	2,147,483,647
+smallint	-32,768	32,767
+tinyint	0	255
+bit	0	1
+decimal	-10^38 +1	10^38 –1
+numeric	-10^38 +1	10^38 –1
+
+
 
 DATE -> 0001-01-01' to '9999-12-31'.
 DATETIME -> 1753-01-01 00:00:00' to '9999-12-31 23:59:59' Time: '00:00:00' to '23:59:59:997'
