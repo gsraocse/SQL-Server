@@ -1,0 +1,120 @@
+SELECT TOP (1) PERCENT orderid, orderdate, custid, empid
+FROM Sales.Orders
+ORDER BY orderdate DESC;
+
+
+DECLARE @n AS BIGINT = 5;
+SELECT TOP (@n) orderid, orderdate, custid, empid
+FROM Sales.Orders
+ORDER BY orderdate DESC;
+
+
+SELECT TOP (3) orderid, orderdate, custid, empid
+FROM Sales.Orders
+ORDER BY (SELECT NULL);
+
+
+SELECT TOP (3) WITH TIES orderid, orderdate, custid, empid
+FROM Sales.Orders
+ORDER BY orderdate DESC;
+
+
+
+-- SQL training
+
+INSERT INTO dbo.TestStructure
+(id, filler1, filler2)
+VALUES
+(1, 'a', 'b');
+
+
+DECLARE @i AS int = 1;
+WHILE @i <= 10000
+BEGIN
+SET @i = @i + 1;
+INSERT INTO dbo.TestStructure
+(id, filler1, filler2)
+VALUES
+(@i, 'a', 'b');
+END;
+ 
+ 
+select * from dbo.TestStructure order by id
+
+-- option 1
+SELECT id, filler1, filler2 
+FROM dbo.TestStructure 
+ORDER BY id
+OFFSET 10 ROWS FETCH NEXT 25 ROWS ONLY; -- S
+
+
+-- option 1
+SELECT id, filler1, filler2 
+FROM dbo.TestStructure 
+ORDER BY id
+OFFSET 10 ROWS 
+--FETCH NEXT 25 ROWS ONLY;
+
+SELECT id, filler1, filler2 
+FROM dbo.TestStructure 
+ORDER BY id
+--OFFSET 10 ROWS
+ FETCH NEXT 25 ROWS ONLY;
+
+ --Note FETCH clause requires an OFFSET clause, and the OFFSET clause doesn’t require a FETCH clause
+
+ SELECT id, filler1, filler2 
+FROM dbo.TestStructure 
+ORDER BY  (SELECT NULL)
+OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY;
+
+
+-- Here if you want to go to particular page
+DECLARE @pagesize AS BIGINT = 2, @pagenum AS BIGINT = 10;
+ SELECT id, filler1, filler2 
+FROM dbo.TestStructure 
+ORDER BY id
+OFFSET (@pagesize - 1) * @pagenum ROWS FETCH NEXT @pagenum ROWS ONLY;
+
+
+MERGE:
+
+MERGE INTO <target table> AS TGT
+USING <SOURCE TABLE> AS SRC
+ON <merge predicate>
+WHEN MATCHED [AND <predicate>] -- two clauses allowed:
+THEN <action> -- one with UPDATE one with DELETE
+WHEN NOT MATCHED [BY TARGET] [AND <predicate>] -- one clause allowed:
+THEN INSERT... –- if indicated, action must be INSERT
+WHEN NOT MATCHED BY SOURCE [AND <predicate>] -- two clauses allowed:
+THEN <action>; -- one with UPDATE one with DELETE
+
+
+CREATE TABLE Merge_src (id int, name varchar(10));
+CREATE TABLE Merge_tgt (id int, name varchar(10),created_date datetime, active char(1));
+truncate table Merge_src
+insert into Merge_src
+SELECT 1, 'srini'
+union all
+SELECT 2, 'vasu'
+union all
+SELECT 3, 'ggk'
+
+MERGE INTO Merge_tgt AS TGT
+USING  Merge_src SRC
+ON SRC.id = TGT.id
+WHEN MATCHED --AND ( TGT.id=SRC.id) 
+THEN UPDATE
+SET TGT.name = SRC.name
+WHEN NOT MATCHED THEN INSERT
+VALUES(SRC.id, SRC.name,GETDATE(),'Y')
+WHEN NOT MATCHED BY SOURCE 
+THEN
+--DELETe
+UPDATE 
+SET TGT.active='N'
+OUTPUT
+$action AS the_action,
+COALESCE(inserted.id, deleted.id) AS id;
+
+
