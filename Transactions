@@ -1,0 +1,173 @@
+-- Default Transaction
+SELECT @@TRANCOUNT
+SELECt top 1 *  from emp_tran 
+SELECT @@TRANCOUNT
+
+
+--Implicit transacton
+SET IMPLICIT_TRANSACTIONS ON
+SELECT @@TRANCOUNT
+BEGIN TRAN
+select * from  test2 
+--drop table test2
+--SELECt top 1*  from emp_tran 
+SELECT @@TRANCOUNT
+rollback; --or rollback
+SELECT @@TRANCOUNT
+ 
+-- Explicit
+ 
+ BEGIN  TRAN
+
+ END TRAN
+
+create table #temp(id int,name varchar(10),age int, address varchar(10),salary int);
+Insert INTO #temp values(1,'Ramesh',32,'Ahmedabad',2000),(2 ,'Khilan ',25,'Delhi',1500.00),(3,'kaushik',23,'Kota',2000.00),(4,'Chaitali',25 ,'Mumbai',6500.00 ),( 5,'Hardik',27, 'Bhopal',8500.00 ) ;
+
+select * from #temp;
+
+begin tran t1
+ DELETE FROM #temp WHERE id =3;
+  select * from #temp;
+ rollback tran t1; 
+ 
+ --Save point examples
+ begin tran t1
+save tran SP1;
+DELETE FROM #temp WHERE ID=1;
+
+save tran SP2;
+DELETE FROM #temp WHERE ID=2;
+
+save tran  SP3;
+ DELETE FROM #temp WHERE ID=3;
+
+ select * from #temp;
+
+ rollback tran sp1.
+
+
+-- ISOLATION LEVELS:
+
+--READ COMMITTED
+--READ UNCOMMITTED
+--REPEATABLE READ
+--SERIALIZABLE
+--SNAPSHOT
+
+
+ 
+CREATE TABLE TEST_ISOLATION(EID int, ename varchar(10), salary float)
+
+ insert into TEST_ISOLATION(EID,ename,Salary)
+    values( 1,'abc',1000)
+
+    insert into TEST_ISOLATION(EID,ename,Salary)
+    values( 2,'xyz',2000)
+	 
+
+ -- Read committed
+begin tran
+        update TEST_ISOLATION set Salary=999 where EID=1
+waitfor delay '00:00:15'
+commit
+
+set transaction isolation level read committed
+        select Salary from TEST_ISOLATION where EID=1
+            
+
+**********************
+ begin tran
+        select * from TEST_ISOLATION            
+        waitfor delay '00:00:15'
+        update TEST_ISOLATION set Salary=999 where EID=1
+        commit
+
+
+		 set transaction isolation level read committed
+        select Salary from TEST_ISOLATION where EID=1
+        
+
+---Uncommitted
+
+		begin tran
+        update TEST_ISOLATION set Salary=1000 where EID=1
+waitfor delay '00:00:15'
+commit
+
+set transaction isolation level read uncommitted
+select Salary from TEST_ISOLATION where EID=1
+
+
+            --------------repetable read
+
+set transaction isolation level repeatable read
+    begin tran
+    select * from TEST_ISOLATION where EID in(1,2)
+    waitfor delay '00:00:15'
+    select * from TEST_ISOLATION where EID in (1,2)
+    rollback
+
+	 update TEST_ISOLATION set Salary=999 where ID=1
+
+	 --or 
+	 insert into TEST_ISOLATION(EID,eName,Salary)
+    values( 15,'steven',11000)
+
+
+	  update TEST_ISOLATION set Salary=999 where EID=3 -- here there is no lock bcz row id 1 and 3 are only in lock
+		
+ 
+
+	-- snapshot
+
+SET XACT_ABORT OFF;  
+GO  
+BEGIN TRANSACTION;  
+SELECT 1
+SELECT 1/0-- Foreign key error.  
+SELECT 2 
+COMMIT TRANSACTION;  
+GO  
+SET XACT_ABORT ON;  
+GO  
+BEGIN TRANSACTION;  
+SELECT 1
+SELECT 1/0-- Foreign key error.  
+SELECT 2   
+COMMIT TRANSACTION;  
+
+
+---
+CREATE TABLE sample(id int)
+
+SET XACT_ABORT OFF;  
+GO  
+BEGIN TRY
+BEGIN TRANSACTION;  
+insert into sample values(1)
+insert into sample values(2)-- Foreign key error.  
+insert into sample values('hi')
+COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+if @@TRANCOUNT>0
+ROLLBACK;
+END CATCH  
+SELECT * FROM sample
+
+
+
+
+
+
+
+GO  
+SET XACT_ABORT ON;  
+GO  
+BEGIN TRANSACTION;  
+SELECT 1
+SELECT 1/0-- Foreign key error.  
+SELECT 2   
+COMMIT TRANSACTION;  
+l
