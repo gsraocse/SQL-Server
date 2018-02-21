@@ -1,0 +1,62 @@
+Create table Department
+(
+    Id int primary key,
+    DepartmentName nvarchar(50)
+)
+
+
+Insert into Department values (1, 'IT')
+Insert into Department values (2, 'HR')
+Insert into Department values (3, 'Payroll')
+Insert into Department values (4, 'Administration')
+Insert into Department values (5, 'Sales')
+
+
+Create table Employee
+(
+    Id int primary key,
+    Name nvarchar(50),
+    Gender nvarchar(10),
+    Salary int,
+    DepartmentId int foreign key references Department(Id)
+)
+
+
+Insert into Employee values (1, 'Mark', 'Male', 50000, 1)
+Insert into Employee values (2, 'Mary', 'Female', 60000, 3)
+Insert into Employee values (3, 'Steve', 'Male', 45000, 2)
+Insert into Employee values (4, 'John', 'Male', 56000, 1)
+Insert into Employee values (5, 'Sara', 'Female', 39000, 2)
+
+
+select * from department
+select * from employee
+
+select * from department d inner join employee e on d.id=e.departmentid
+select * from department d left outer join employee e on d.id=e.departmentid
+
+GO
+Create function fn_GetEmployeesByDepartmentId(@DepartmentId int)
+Returns Table
+as
+Return
+(
+    Select Id, Name, Gender, Salary, DepartmentId
+    from Employee where DepartmentId = @DepartmentId
+)
+Go
+
+Select D.id,D.DepartmentName, E.Name, E.Gender, E.Salary
+from Department D
+Cross Apply fn_GetEmployeesByDepartmentId(D.Id) E
+
+
+Select D.DepartmentName, E.Name, E.Gender, E.Salary
+from Department D
+Outer Apply fn_GetEmployeesByDepartmentId(D.Id) E
+
+
+
+
+
+
