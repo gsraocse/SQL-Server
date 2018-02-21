@@ -1,0 +1,266 @@
+DECLARE @a varchar(5)=NULL
+DECLARE @b varchar(10)='welcome to'
+
+SELECT ISNULL(@a,@b) -- It takes only two parameter and it returns always first variable data type and length
+SELECT COALESCE(@a,@b)-- It will take multiple parameters and returns first not null value.
+
+
+Scalar: It will take single input and returns single output. 
+These functions doesn't need any group by operations'. It can be used in SELECT
+Numeric - ABS, FLOOR, CEILING, ROUND, ISNUMERIC 
+Date - GETDATE(),CURRENT_TIMESTAMP,DATEPART, DATENAME, DATEADD,DAtediff
+DAY(), year(), month(), EOMONTH()
+Character/String Functions-ASCII,LTRIM, RTRIM,CHARINDEX,CONCAT,
+FORMAT,LEFT, LOWER,LOWER,PATINDEX,REPLACE,REPLICATE,REVERSE,RIGHT,
+STUFF, SUBSTRING,LEN(),DATALENGTH()
+Conversion  functions-CAST, CONVERT
+
+Aggregate:
+MIN
+MAX
+COUNT
+AVG
+SUM
+COUNT_BIG
+ 
+Numeric Functions:
+SELECT ABS(-2)-- Absolute value
+SELECT FLOOR(1235.70)
+SELECT CEILING(1456.50)
+SELECT ROUND(1456.70,0)
+SELECT ROUND(1456.789635,1)
+SELECT ROUND(1456.789635,2)
+SELECT ROUND(1456.789635,-1)
+SELECT ROUND(1456.789635,-2)
+
+Date functions:
+--ABS, FLOOR, CEILING, ROUND, ISNUMERIC 
+
+Date - GETDATE(),CURRENT_TIMESTAMP,DATEPART, DATENAME, DATEADD,DAtediff
+DAY(), year(), month(), EOMONTH()
+
+SELECT GETDATE(), CURRENT_TIMESTAMP
+
+SELECT DATEPART(dd,GETDATE()),SELECT DATEPART(mm,GETDATE())
+SELECT DATEPART(YEAR,GETDATE()),SELECT DATEPART(DAYOFYEAR,GETDATE())
+SELECT DATEPART(WEEKDAY,GETDATE()),SELECT DATEPART(WEEK,GETDATE())
+SELECT DATEPART(DW,GETDATE()),SELECT DATEPART(hh,GETDATE())
+SELECT DATEPART(mm,GETDATE()),SELECT DATEPART(ss,GETDATE())
+SELECT DATEPART(month,getdate())
+
+SELECT DATENAME(month, getdate())
+SELECT DATENAME(year,getdate())
+SELECT DATENAME(WEEKDAY,GETDATE())
+SELECT DATENAME(DAY,GETDATE())
+SELECT DATENAME(DAYOFYEAR,GETDATE())
+
+SELECT DATEADD(dd,1,GETDATE())
+
+SELECT DATEADD(mm,1,GETDATE())
+SELECT DATEADD(YEAR,1,GETDATE())
+SELECT DATEADD(dd,1,GETDATE())
+SELECT DATEADD(dd,-1,GETDATE())
+
+SELECT GETDATE()-10 -- Best practise to use date add function
+
+SELECT DATEDIFF(mm,'2017-05-31','2017-07-15')
+SELECT DATEDIFF(dd,'2017-05-01','2017-07-27')
+SELECT DATEDIFF(year,'2018-05-01','2017-07-27')
+SELECT DAY(GETDATE()),year(GETDATE()),month(GETDATE()),
+ EOMONTH(GETDATE())
+
+ String:
+ LTRIM- IT remove space from left side
+ RTRIM - Right side
+ LEFT/RIGHT-  SELECT LEFT('welcome',2),RIGHT('welcome',2),
+ LOWER/UPPER - SELECT UPPER('vasu')
+ REVERSE- SELECT REVERSE('Hi'),SELECT REVERSE(3600)
+ SELECT ASCII('a')
+ SELECT CHARINDEX('e','weelcome1236',4)
+ SELECT SUBSTRING('welcome',2,3)
+ SELECT 'welcome'+'sql'+NULL
+ SELECT CONCAT('welcome',',','sql',NULL)-- Ignore the nulls.
+ ---SELECT LEN(),DATALENGTH()
+--FORMAT,PATINDEX,REPLACE,REPLICATE,STUFF,  
+
+ 
+ 
+LEN- IT will count the number of characters in the string
+DATALENGTH- It will calculate no.of bytes of storage based on the lenght of value
+DECLARE @a int = 123456
+DECLARE @b varchar(10)='sql'
+DECLARE @c nvarchar(20)='sql'
+SELECT LEN(@a), LEN(@b), LEN(@c)
+SELECT DATALENGTH(@a), DATALENGTH(@b), DATALENGTH(@c)
+
+FORMAT-- To convert into different countries
+DECLARE @d DATETIME = '10/01/2011';  
+SELECT FORMAT ( @d, 'd', 'en-US' ) AS 'US English Result'  
+      ,FORMAT ( @d, 'd', 'en-gb' ) AS 'Great Britain English Result'  
+      ,FORMAT ( @d, 'd', 'de-de' ) AS 'German Result'  
+      ,FORMAT ( @d, 'd', 'zh-cn' ) AS 'Simplified Chinese (PRC) Result';   
+
+SELECT FORMAT ( @d, 'D', 'en-US' ) AS 'US English Result'  
+      ,FORMAT ( @d, 'D', 'en-gb' ) AS 'Great Britain English Result'  
+      ,FORMAT ( @d, 'D', 'de-de' ) AS 'German Result'  
+      ,FORMAT ( @d, 'D', 'zh-cn' ) AS 'Chinese (Simplified PRC) Result';
+
+DECLARE @d DATETIME = GETDATE();  
+SELECT FORMAT( @d, 'dd/MM/yyyy', 'en-US' ) AS 'DateTime Result'  
+       ,FORMAT(123456789,'###-##-####') AS 'Custom Number Result';
+
+
+-- PATINDEX
+
+    SELECT PATINDEX('%ter%', 'interesting data ter');  -- From .Net 
+    SELECT charindex('leep','dileep') -- Mostly used syntax
+
+
+
+--Replace
+SELECT REPLACE('abcdefghicde','cde','xyz');
+
+SELECT REPLACE('a  bc','  ',' ')
+
+
+  --REPLICATE
+  SELECT  REPLICATE('0', 6)
+ DECLARe @a varchar(12)='123456123456'
+ SELECT REPLICATE('0',12-LEN(@a))+@a
+
+  --,STUFF --The STUFF function inserts a string into another string.
+   It deletes a specified length of characters 
+
+SELECT STUFF('abcdef', 2, 3, 'ijklmn');  
+SELECT STUFF('abcdef', 2, 3,''); 
+
+
+--PARSE--When you want to convert text to date
+SELECT PARSE('Monday, 13 December 2010' AS datetime2 USING 'en-US') 
+AS Result; 
+
+CAST and Convert
+
+
+--PARSE--When you want to convert text to date
+SELECT PARSE('Monday, 13 December 2010' AS datetime2 USING 'en-US') 
+AS Result;  
+ 
+
+CAST and Convert- These are conversion functions
+-Except date relations both Convert and CAst does the same
+- CAst will accept two parameters
+--It is same as Cast but it will allow us to give formating style for dates
+- Convert will accept 3 parameters
+- Mostly Convert will be used for date level operations
+
+You have a requirement like 
+Firstname, lastname, phone number
+varchar		varchar		int
+his address
+Firstname lastname, phonenumber using concatenation
+
+DECLARE @a int=2356
+DECLARE @b varchar(10)='Welcome'
+
+SELECT CAST(@a as VARCHAR(40))+@b
+SELECT CONVERT(VARCHAR(40),@a )+@b
+SELECT @b+CAST(@a as varchar)
+SELECT TRY_CAST(@b as int)
+SELECT TRY_convert(int, @b)
+
+
+
+Convert: 
+syntax:
+CONVERT(Datetype,Value, Formating style)
+
+SELECT Convert(Varchar,GETDATE(),112) -- 101,102,112
+
+Source - Target table
+S- DAteformat- MM/DD/YYYY
+T- DAteformat -yyyymmdd 
+
+CAST and Convert-> Conversion
+
+SELECT 'Account balance'+ CAST(20 as varchar)
+
+
+
+
+Aggregate Functions-
+ -All the aggregate functiosn will ignore NULLS
+ - All non aggregate column should be part of GRoup by
+ - Without group by we can run select statement with agg functions also
+ -- Having clause will be used on top of group by result
+
+ -- Count_Big - Incase no.of rows exceeds int then only use count_big
+ SELECT  * FROM emp
+SELECT  AVG(sal), count(comm), MIN(sal), MAX(sal), avg(comm),
+COUNT_BIG(empno)
+from emp
+group by deptno
+having max(sal)>2850
+
+
+
+--
+
+-- Assignments:
+1. Calcuate the Age for today date (Input DOB)
+2. Find out the 2nd highest salary across the company
+3. Find the 3rd lowest salary for each department
+Diff b/w Having and Where clause
+
+
+--Aggregate Functions-AVG,COUNT,MIN, SUM,MAX,COUNT_BIG
+-- It will ignore NULLS
+
+QUERY Execution order:
+
+FROM
+WHERE
+GROUP BY 
+having
+select
+order by
+top
+
+
+ Aggregate Functions-
+ -All the aggregate functiosn will ignore NULLS
+ - All non aggregate column should be part of GRoup by
+ - Without group by we can run select statement with agg functions also
+ -- Having clause will be used on top of group by result
+
+ -- Count_Big - Incase no.of rows exceeds int then only use count_big
+ SELECT  * FROM emp
+SELECT  AVG(sal), count(comm), MIN(sal), MAX(sal), avg(comm),
+COUNT_BIG(empno)
+from emp
+group by deptno
+having max(sal)>2850
+
+
+
+-- Assignments:
+1. Calcuate the Age for today date (Input DOB)
+2. Find out the 2nd highest salary across the company
+3. Find the 3rd lowest salary for each department
+Diff b/w Having and Where clause
+
+ 
+SELECT
+ --ROW_NUMBER()OVER (Order by sal desc) as RM,
+ --RANK()OVER (Order by sal desc) as Rnk,
+ --DENSE_RANK()OVER (Order by sal desc) as dRnk,
+   ROW_NUMBER()OVER (partition by deptno Order by sal desc) as RM,
+ RANK()OVER (partition by deptno Order by sal desc) as Rnk,
+  DENSE_RANK()OVER (partition by deptno Order by sal desc) as dRnk,
+      Ntile(2) OVER(order by sal desc) ntile
+ From emp 
+order by  sal desc
+these functions will also called as windows functions
+
+
+ 
