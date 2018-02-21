@@ -1,0 +1,41 @@
+2016:
+
+Always Encrypted : Always Encrypted is designed to protect
+ data at rest or in motion. With Always Encrypted, 
+ SQL Server can perform operations on encrypted data
+ and the encryption key can reside with the application. 
+ Encryption and decryption of data happens transparently 
+ inside the application. This means the data stored in SQL Server
+ will be encrypted which can secure it from DBA and administrators 
+ but that also has considerations for ad-hoc queries, reporting and exporting the data.
+ 
+ JSON Support:
+ Dynamic Data Masking:
+ PolyBase: 
+ Row Level Security:
+ Multiple TempDB
+ Temporal Table
+ R Introduction
+ 
+ References:
+ https://blogs.technet.microsoft.com/dataplatforminsider/2015/05/04/sql-server-2016-public-preview-coming-this-summer/
+ https://www.codeproject.com/Articles/1111938/SQL-New-Features
+ 
+ 
+ 2014:
+  In-memory, online transaction processing (OLTP).
+   Column Store Indexes: - Update
+   Hadoop Connectivity
+   
+ 
+ 
+ CREATE SEQUENCE [schema_name . ] sequence_name
+ [ AS [built_in_integer_type | user-defined_integer_type]]
+ [ START WITH  ]
+ [ INCREMENT BY  ]
+ [ { MINVALUE [  ] } | { NO MINVALUE } ]
+ [ { MAXVALUE [  ] } | { NO MAXVALUE } ]
+ [ CYCLE | { NO CYCLE } ] --  to recycle the sequence once it reaches to the maximum or minimum (if increment by is a negative number).
+ [ { CACHE [  ] } | { NO CACHE } ] - to pre-allocate the number of sequences specified by the given value.
+ [ ; ]
+ 
