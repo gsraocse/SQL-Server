@@ -1,0 +1,16 @@
+create table #test (id int, name text)
+insert into #test
+select 1,'a'
+
+create table #test1 (id int, name text)
+insert into #test1
+select 1,'a'
+
+select * from #test
+union
+select * from #test1
+
+
+select * from #test
+union all
+select * from #test1
