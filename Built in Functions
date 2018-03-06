@@ -108,6 +108,22 @@ SELECT FORMAT ( @d, 'D', 'en-US' ) AS 'US English Result'
 DECLARE @d DATETIME = GETDATE();  
 SELECT FORMAT( @d, 'dd/MM/yyyy', 'en-US' ) AS 'DateTime Result'  
        ,FORMAT(123456789,'###-##-####') AS 'Custom Number Result';
+       
+SELECT FORMAT(GETDATE(),'d','en-IN') AS [DATE IN INDIA FORMAT]   
+SELECT FORMAT(GETDATE(),'dd/MM/yyyy') AS [dd/MM/yyyy]  
+SELECT FORMAT(GETDATE(),'hh:mm:ss tt') [hh:mm:ss tt] 
+
+SELECT FORMAT(100,'C','en-IN')AS [CURRENCY IN INDIA FORMAT]  
+SELECT FORMAT(100,'C4','en-IN') AS [CURRENCY IN INDIA FORMAT(WITH 4 DECIMALS)] 
+
+SELECT FORMAT(1,'P','en-IN') AS [PERCENTAGE IN INDIA FORMAT]  
+SELECT FORMAT(1,'P4','en-IN') AS [CUURENCY IN INDIA FORMAT(WITH 4 DECIMALS)] 
+
+SELECT FORMAT ( GETDATE(), 'MMMM dddd d', 'ta-IN' ) AS FormattedDate
+SELECT FORMAT ( GETDATE(), 'MMMM dddd d', 'te-IN' ) AS FormattedDate
+SELECT FORMAT ( GETDATE(), 'MMMM dddd d', 'hi-IN' ) AS FormattedDate
+
+
 
 
 -- PATINDEX
