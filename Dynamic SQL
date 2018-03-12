@@ -1,0 +1,13 @@
+"----declare @a int
+--declare @sql nvarchar(100)
+--declare @sql1 nvarchar(100)
+--declare @IntVariable varchar(15) = '''Rober'' or 1=1'
+--declare @ParmDefinition nvarchar(15)= '@a varchar(15)'
+
+--set @sql = 'select * from emp where ename = @a'
+
+--set @sql1 = 'select * from emp where ename = ' +@IntVariable
+
+--EXECUTE sp_executesql @sql, @ParmDefinition, @a = @IntVariable;
+--print @sql1
+--EXEC (@sql1)"
