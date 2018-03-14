@@ -1,0 +1,21 @@
+
+-- For XML RAW
+SELECT empno, ename, deptno, sal from emp
+order by deptno
+ FOR XML RAW  
+
+ SELECT empno, ename, deptno, sal from emp
+order by deptno
+ FOR XML RAW  ('a')
+ 
+  SELECT empno, ename, deptno, sal from emp
+order by deptno
+ FOR XML RAW  ('a') , ROOT ('empdata'), ELEMENTS
+
+
+
+
+ --FOR XML AUTO
+ SELECT empno, ename, deptno, sal from emp
+order by deptno
+ FOR XML AUTO
