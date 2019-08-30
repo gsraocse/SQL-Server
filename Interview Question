@@ -1,0 +1,50 @@
+Question1: 
+/*Create an SQL query that shows the TOP 3 authors who sold the most books in total! */ 
+DECLARE @a table
+(a varchar(50), b varchar(50))
+
+insert into @a
+select 
+'author_1',	'book_1'
+union all
+select  'author_1',	'book_2'
+union all
+select 'author_2',	'book_3'
+union all
+select 'author_2',	'book_4'
+union all
+select 'author_2',	'book_5'
+union all
+select 'author_3',	'book_6'	
+
+DECLARE @b table
+(a varchar(50), b int)
+insert into @b
+
+select 
+'book_1',	1000 
+union all 
+select 
+'book_2',	1500
+union all 
+select 
+'book_3',	34000
+union all 
+select 
+'book_4',	29000
+union all 
+select 
+'book_5',	40000
+union all 
+select 
+'book_6',	4400
+
+select  *  from @a
+select *  from @b
+select top 3 a.a, sum(b.b) over(partition by a.a order by b.b), ROW_NUMBER() over (partition by a.a order by b.b  desc) rnm  from @a a
+join @b b
+on a.b=b.a
+order by ROW_NUMBER() over (partition by a.a order by b.b  desc) 
+
+
+
