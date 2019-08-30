@@ -73,3 +73,14 @@ group by user_id
 having count(event_date_time)>= 1 and count(event_date_time)<2
 
 
+****************
+Print every department where the average salary per employee is lower than $500!
+
+SELECT department_name, AVG(salaries.salary) AS avg_salaries
+FROM employees
+JOIN salaries
+ON employees.employee_id = salaries.employee_id
+GROUP BY department_name
+HAVING AVG(salaries.salary) < 500;
+
+
