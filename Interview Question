@@ -47,4 +47,29 @@ on a.b=b.a
 order by ROW_NUMBER() over (partition by a.a order by b.b  desc) 
 
 
+********************************
+
+/*Write an SQL query to find out how many users 
+inserted more than 1000 but less than 2000 images in their presentations! */
+
+declare @a table   
+(user_id int ,	event_date_time int)
+
+insert into @a
+select 7494212,	1535308430
+union all
+select 7494212,	1535308433
+union all
+select 1475185,	1535308444
+union all
+select 6946725,	1535308475
+union all
+select 6946725,	1535308476
+union all
+select 6946725,	1535308477
+
+select user_id, count(event_date_time) from @a
+group by user_id
+having count(event_date_time)>= 1 and count(event_date_time)<2
+
 
