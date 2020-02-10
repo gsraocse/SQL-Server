@@ -1,0 +1,32 @@
+DECLARe @a varchar(10)
+set @a='srinivasarao'
+SELECT @a -- Here no error
+
+DECLARE @a1 table
+(a varchar(10))
+insert into @a1
+select 'srinivasarao' -- here you will get binary data would be truncated
+
+DECLARe @a2 tinyint =255
+SET @a2=@a2+1 -- here error
+select @a2+1,@a2 -- here no error
+
+DECLARe @a2 smallint =255
+SET @a2=@a2+1 -- here error
+select @a2+1,@a2 -- here no error
+
+
+account_nbr account_type    account_reference
+----------- --------------- -----------------
+1           Personal        abc
+2           Business Basic  101
+3           Personal        def
+4           Business Plus   5
+
+
+SELECT account_nbr, account_reference AS account_ref_nbr
+FROM Accounts
+WHERE account_type LIKE 'Business%'
+  AND CAST(account_reference AS INT) > 20;
+
+
