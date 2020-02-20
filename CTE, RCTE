@@ -1,0 +1,23 @@
+--CREATE TABLE #NUMS
+--(N BIGINT);
+
+--INSERT INTO #NUMS
+--VALUES (3), (5), (7);
+WITH R AS
+(
+    SELECT N FROM #NUMS
+    UNION ALL
+    SELECT N*N AS N FROM R WHERE N*N < 10000000
+)
+SELECT N FROM R order by N
+
+**** Avoid Recursion using option(maxrecursion)****************
+
+WITH R AS
+(
+    SELECT N FROM #NUMS
+    UNION ALL
+    SELECT n+1 AS N FROM R 
+	--WHERE N*N < 10000000
+)
+SELECT N FROM R  option(maxrecursion 10) 
