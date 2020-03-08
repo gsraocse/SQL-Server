@@ -1,0 +1,120 @@
+Views
+VIEWS: It's a virtual table
+Advantages:
+- Security
+-> It's pointer to the base table
+->If we create index on top of view then will call it M view (Materialsed view)
+-> Insert/update/delete at a time by referring only one table
+-> We should not use order by in the VIEWS
+
+Example:
+
+SELECT * FROM dept;
+
+syntax:
+
+CREATE view vw_dept
+AS
+SELECT  deptno, loc from dept where deptno in (10,20)
+ 
+--SELECT * FROM vw_dept
+ALTER view:
+
+ALTER view vw_dept
+AS 
+SELECT deptno, dname from dept where deptno in (10,30)
+
+SELECT * FROM vw_dept;
+
+-- INSERT /update/delete
+insert into vw_dept
+select 50,'Payroll'
+select * from dept;
+
+UPDATE vw_dept
+set dname='sales' where deptno=30
+
+DELETE from vw_dept
+where deptno=50
+
+
+Above view will call it as simple view
+
+If we use joins and then create a view then will call it as complex view
+
+
+SELECT * FROM emp;
+
+select * from dept;
+
+ALTER VIEW vw_dept
+AS
+SELECT A.empno,A.ename,A.deptno,B.dname  from emp A
+JOIN dept B
+ON A.deptno=B.deptno
+where A.deptno=20
+
+select * from vw_dept
+
+insert into vw_dept(dname)
+select 'finance'
+
+Same for delete/update
+
+
+While creating the views there 3 different types of options we generally use
+- WITH SCHEMA binding
+-With encryption
+-With check option
+
+
+ALTER VIEW vw_dept
+ WITH encryption
+AS
+SELECT A.empno,A.ename,A.deptno,B.dname  from emp A
+JOIN dept B
+ON A.deptno=B.deptno
+where A.deptno=20
+
+-- Always Save the script before creating a view with encryption
+
+
+WITH schema binding:
+--When we create a view we will refer the base tables. In any case the base tables schema got changes then your view will fail
+--When we use schema binding we always need to provide schema
+
+select * from dept;
+
+ALTEr view vw_sb_dept
+WITH SCHEMAbinding
+as 
+select deptno, dname, loc from dbo.dept;
+
+select * from vw_sb_dept
+
+--- WITH Check option
+
+ALTER view vw_CK_dept
+WITH schemabinding
+AS
+SELECT  deptno, loc from dbo.dept where deptno in (10)
+with check option
+
+
+select * from vw_CK_dept
+update vw_CK_dept
+set deptno=10 where deptno=75
+
+select * from dept;
+update dept
+set deptno=10
+where deptno=75
+
+MAterialised view:
+-> When you want to create index on top of view then always create a view using with schema binding
+select * from vw_CK_dept
+
+create unique clustered  index ck_idx on vw_CK_dept(deptno)
+
+Other imp:
+->Whenever Base table data got updated, Mview data also will update
